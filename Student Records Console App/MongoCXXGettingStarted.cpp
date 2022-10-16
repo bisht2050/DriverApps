@@ -77,6 +77,12 @@ void insertDocument(mongocxx::collection& collection, const bsoncxx::document::v
 	collection.insert_one(document.view());
 }
 
+// Delete a document from a given collection.
+void deleteDocument(mongocxx::collection& collection, const bsoncxx::document::value& document)
+{
+	collection.delete_one(document.view());
+}
+
 // Update the document with given key-value pair.
 void updateDocument(mongocxx::collection& collection, const string& key, const string& value, const string& newKey, const string& newValue)
 {
@@ -157,6 +163,17 @@ void findStudentRecord(mongocxx::collection& collection)
 	findDocument(collection, "rollNo", rollNo);
 }
 
+// Delete student record.
+void deleteStudentRecord(mongocxx::collection& collection)
+{
+	string rollNo;
+
+	cout << "Enter roll number: ";
+	cin >> rollNo;
+
+	deleteDocument(collection, createDocument({ {"rollNo", rollNo} }));
+}
+
 // Print student records.
 void printStudentRecords(mongocxx::collection& collection)
 {
@@ -218,7 +235,8 @@ int main()
 		 cout << "Enter 1 to input student record" << endl;
 		 cout << "Enter 2 to update student record" << endl;
 		 cout << "Enter 3 to find student record" << endl;
-		 cout << "Enter 4 to print all student records" << endl;
+		 cout << "Enter 4 to delete student record" << endl;
+		 cout << "Enter 5 to print all student records" << endl;
 		 cout << "Enter 0 to exit" << endl;
 		 cout << "Enter Choice : "; 
 		 cin >> choice;
@@ -237,6 +255,9 @@ int main()
 			 findStudentRecord(studentCollection);
 			 break;
 		 case 4:
+			 deleteStudentRecord(studentCollection);
+			 break;
+		 case 5:
 			 printStudentRecords(studentCollection);
 			 break;
 		 case 0:
