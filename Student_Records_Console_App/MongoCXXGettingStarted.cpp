@@ -86,7 +86,12 @@ void deleteDocument(mongocxx::collection& collection, const bsoncxx::document::v
 // Update the document with given key-value pair.
 void updateDocument(mongocxx::collection& collection, const string& key, const string& value, const string& newKey, const string& newValue)
 {
-	auto cursor = collection.find({});
+
+	// Create the query filter
+	auto filter = bsoncxx::builder::stream::document{} << key << value << bsoncxx::builder::stream::finalize;
+
+	//Add query filter argument in find
+	auto cursor = collection.find({ filter });
 
 	for (auto&& doc : cursor)
 	{
@@ -100,8 +105,12 @@ void updateDocument(mongocxx::collection& collection, const string& key, const s
 // Find the document with given key-value pair.
 void findDocument(mongocxx::collection& collection, const string& key, const string& value)
 {
-	auto cursor = collection.find({});
-
+	// Create the query filter
+	auto filter = bsoncxx::builder::stream::document{} << key << value << bsoncxx::builder::stream::finalize;
+	
+	//Add query filter argument in find
+	auto cursor = collection.find({ filter });
+	
 	for (auto&& doc : cursor)
 	{
 		if (doc[key].get_string().value == value)
