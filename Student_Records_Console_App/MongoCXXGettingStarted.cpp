@@ -23,12 +23,6 @@ vector<string> getDatabases(mongocxx::client& client)
 	return client.list_database_names();
 }
 
-// Create a new database.
-void createDatabase(mongocxx::client& client, string databaseName)
-{
-	client[databaseName];
-};
-
 
 // ********************************************** Collection Methods **********************************************
 
@@ -219,7 +213,7 @@ int main()
 	if (!(std::find(dbs.begin(), dbs.end(), dbName) != dbs.end()))
 	{
 		// Create a new database & collection for students.
-		createDatabase(conn, dbName);
+		conn[dbName];
 	}
 
 	auto studentDB = conn.database(dbName);
